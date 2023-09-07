@@ -176,7 +176,7 @@
   </section>
   <section class="flex flex-col lg:flex-row mt-5">
     <div class="basis-4/6 bg-slate-50	rounded-lg p-10 lg:mr-8">
-      <Clients {timeSlots} />
+      <Clients clients={timeSlots} />
     </div>
   </section>
 </div>
