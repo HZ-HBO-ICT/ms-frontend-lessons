@@ -1,22 +1,25 @@
 <script>
-  import { createEventDispatcher } from 'svelte';
-  export let clients = [];
-  
-  const dispatch = createEventDispatcher();
-
-  function displayClientDetails(client) {
-    dispatch('clientDetails', {
-      clientDetails: client,
-    });
+  async function getAllClients() {
+    const res = await fetch(`http://localhost:3011/clients`);
+    const values = await res.json();
+    return values;
   }
+
+  let clientsPromises = getAllClients();
 </script>
 
-<div>
-  <ul class="">
-    {#each clients as client}
-      {#if client.appointment != undefined}
-        <li on:click={displayClientDetails(client.appointment)} class="inline-block p-2 hover:bg-violet-600 cursor-pointer">{client.appointment.name}</li>
-      {/if}
-    {/each}
-  </ul>
-</div>
+<section class="flex flex-col lg:flex-row mt-5">
+  <div class="basis-4/6 bg-slate-50 rounded-lg p-10 lg:mr-8">
+    <ul>
+      {#await clientsPromises}
+        <li>...waiting</li>
+      {:then clients}
+        {#each clients as client}
+          <li>{client}</li>
+        {/each}
+      {:catch error}
+        <li>Error: {error.message}</li>
+      {/await}
+    </ul>
+  </div>
+</section>
